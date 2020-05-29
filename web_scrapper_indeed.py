@@ -1,46 +1,56 @@
 from bs4 import BeautifulSoup
 import requests
+import csv
+import time
+import os
 
-pages = (10, 20, 30, 40, 50)
 
-for page in pages:
+pages = [10, 20, 30, 40, 50]
 
-    source = requests.get('https://www.indeed.com/jobs?q=python+developer&l=()'.format(page)).text
+with open('C:/Users/Jenjhayden/Desktop/scrapper_data/python_list.csv', 'a', encoding='utf-8', newline='') as f_output:
+    csv_print = csv.writer(f_output)
 
-    soup = BeautifulSoup(source,'html5lib')
+    file_is_empty = os.stat('C:/Users/Jenjhayden/Desktop/scrapper_data/python_list.csv').st_size == 0
+    if file_is_empty:
+        csv_print.writerow(['Job_Title', 'Company', 'Location', 'Summary', 'Salary'])
 
-    for jobs in soup.find_all (class_='result'):
+    for page in pages:
+        source = requests.get('https://www.indeed.com/jobs?q=python+developer&l={}'.format(page)).text
 
-        try:
-            title = jobs.h2.text.strip()
-        except Exception as e:
-            title = None
-        print('Job Title:', title)
+        soup = BeautifulSoup(source,'html5lib')
 
-        try:
-            company = jobs.span.text.strip()
-        except Exception as e:
-            company= None
-        print('Company:', company)
+        for jobs in soup.find_all (class_='result'):
 
-        try:
-            location = jobs.find('span', class_='location').text.strip()
-        except Exception as e:
-            location = None
-        print('Location:', location)
+            try:
+                title = jobs.h2.text.strip()
+            except Exception as e:
+                title = None
+            print('Job Title:', title)
 
-        try:
-            summary = jobs.find('span', class_='summary').text.strip()
-        except Exception as e:
-            summary = None
-        print('Summary:', summary)
+            try:
+                company = jobs.span.text.strip()
+            except Exception as e:
+                company= None
+            print('Company:', company)
 
-        try:
-            salary = jobs.find('span', class_='no-wrap').text.strip()
-        except Exception as e:
-            salary = None
-        print('salary:', salary)
+            try:
+                location = jobs.find('span', class_='location').text.strip()
+            except Exception as e:
+                location = None
+            print('Location:', location)
 
-        print('------------------')
+            try:
+                summary = jobs.find('span', class_='summary').text.strip()
+            except Exception as e:
+                summary = None
+            print('Summary:', summary)
 
-        time.sleep(0.5)
+            try:
+                salary = jobs.find('span', class_='no-wrap').text.strip()
+            except Exception as e:
+                salary = None
+            print('salary:', salary)
+
+            print('------------------')
+
+            time.sleep(0.5)
