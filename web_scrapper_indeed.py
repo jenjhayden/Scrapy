@@ -51,6 +51,8 @@ with open('C:/Users/Jenjhayden/Desktop/scrapper_data/python_list.csv', 'a', enco
                 salary = None
             print('salary:', salary)
 
+            csv_print.writerow([title, company, location, summary, salary])
+            
             print('------------------')
 
             time.sleep(0.5)
